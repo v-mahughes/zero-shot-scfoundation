@@ -19,25 +19,6 @@ GPUs supported by flash attention are:
 
 ## Installation
 
-The amount of time that the installation takes depends on (1) whether you chose mamba over conda (former is much faster in my experience), (2) how many dependencies are already present in your environment, (3) the speed of your internet connection, and (4) the speed of your machine. The following steps, took me about 1 hour to complete on a remote HPC with fast internet connection.
-
-### Conda / Mamba
-
-You can install the dependencies using conda. To do so, you need to have conda installed on your machine. If you don't have it, you can install it from [here](https://docs.conda.io/en/latest/miniconda.html).
-
-We strongly recommend using [mamba](https://mamba.readthedocs.io/en/latest/user_guide/mamba.html) instead of conda, since it is much faster in our experience. If you are starting from scratch, i.e. don't have conda installed, you can install mamba instead of conda by following their guide [here](https://mamba.readthedocs.io/en/latest/mamba-installation.html#fresh-install-recommended).
-
-If you already have conda install and want to benefit from the speed and enhanced experience of mamba, you can do so by running:
-
-```bash
-# install mamba in your base environment
-conda install -c conda-forge mamba
-```
-
-Be warned though, this is not a recommended way by the creators of mamba.
-
-*Note:* If you installed mamba from scratch, in all commands below you can replace `conda` with `mamba`. However, if you just installed mamba in your existing conda install use `mamba` only for creating the environment.
-
 #### 1. Installing conda environment
 
 ```bash
@@ -60,27 +41,14 @@ This can be tricky, as scGPT requires specific flash-attn version, and flash att
 ```bash
 # make sure sc_foundation_evals env is activated
 # We have found it easier to install flash attention first, and then scGPT
-pip install flash-attn==1.0.4 --no-build-isolation
+pip install flash-attn==1.0.1 --no-build-isolation
 # then install v1.0.6 version of scGPT
 pip install git+https://github.com/bowang-lab/scGPT.git@v0.1.6
 pip install wandb
+pip install PyComplexHeatmap
 ```
 
 #### 3. Installing Geneformer
-
-```bash
-pip install git+https://huggingface.co/ctheodoris/Geneformer.git
-
-```
-
-#### 4. Installing `sc_foundation_evals` package
-
-And finally, install the `sc_foundation_evals` package (the code to run evaluations on zero-shot scFoundation models) itself.
-
-```bash
-cd sc_foundation_evals
-pip install .
-```
 
 To run notebooks you also need to have the weights of the models downloaded. scGPT weights are avaialble [here](https://github.com/bowang-lab/scGPT#pretrained-scgpt-model-zoo) and Geneformer weights are available in its repository. As per the instructions in the Geneformer repository, make sure you have `git lfs` installed before downloading the weights via repository cloning.
 
@@ -89,6 +57,18 @@ To run notebooks you also need to have the weights of the models downloaded. scG
 # Make sure you have git-lfs installed (https://git-lfs.com)
 git lfs install
 git clone https://huggingface.co/ctheodoris/Geneformer
+echo "recursive-include geneformer *" >> Geneformer/MANIFEST.in
+cd Geneformer
+pip install .
+```
+
+#### 4. Installing `sc_foundation_evals` package
+
+And finally, install the `sc_foundation_evals` package (the code to run evaluations on zero-shot scFoundation models) itself.
+
+```bash
+cd ..
+pip install .
 ```
 
 ### Docker
@@ -122,6 +102,7 @@ To best understand the code and it's organization, please have a look at the not
 - [Geneformer_zero_shot](notebooks/Geneformer_zero_shot.ipynb) - notebook for running Geneformer zero-shot evaluation
 - [Baselines_HVG_and_scVI](notebooks/Baselines_HVG_and_scVI.ipynb) - notebook for running the baselines used in the paper, i.e. HVG and scVI.
 
+To run scGPT evaluations from an executable python script, use [scGPT_zero_shot.py](notebooks/scGPT_zero_shot.py). To run an example for this script, use [Example_scGPT_zero_shot.sh](notebooks/Example_scGPT_zero_shot.sh).
 
 ## Any questions?
 
